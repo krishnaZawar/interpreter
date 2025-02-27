@@ -1,0 +1,14 @@
+syntax:
+    input(prompt)
+    prompt is a expression of string literals
+
+return value:
+    returns an numeric value
+
+language:
+    start: statement
+
+    statement : INPUT '(' prompt ')'
+
+    prompt : STRINGLITERAL prompt |
+           STRINGLITERAL

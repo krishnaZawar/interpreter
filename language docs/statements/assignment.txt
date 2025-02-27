@@ -1,0 +1,8 @@
+syntax :
+    <variable name> = <valid expression>;
+
+
+language for numbers:
+    start : statement
+
+    statement : IDENTIFIER '=' expression ';'

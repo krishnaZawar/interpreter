@@ -1,0 +1,6 @@
+if(input("num1 : ") == input("num2 : ")){
+    print("both are equal");
+}
+else{
+    print("both are not equal");
+}

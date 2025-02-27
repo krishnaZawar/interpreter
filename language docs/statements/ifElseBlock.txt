@@ -1,0 +1,36 @@
+syntax:
+    type 1:
+        if(booleanExpression){
+            statements
+        }
+
+    type 2:
+        if(booleanExpression){
+            statements
+        }
+        else{
+            statements
+        }
+    
+    type 3:
+        if(booleanExpression){
+            statements
+        }
+        else if(booleanExpression){
+            statements
+        }
+        else{
+            statements
+        }
+        
+language:
+    start : ifElseIfStatement
+
+    ifElseIfStatement : ifStatement |
+                        ifStatement elseIfStatements elseStatement
+    elseIfStatements  : elseIfStatement elseIfStatements |
+                        elseIfStatement
+
+    ifStatement       : "if" '(' booleanExpression ')' '{' statements '}'
+    elseIfStatement   : "else if" '(' booleanExpression ')' '{' statements '}' 
+    elseStatement     : "else" '{' statements '}'

@@ -1,0 +1,12 @@
+syntax:
+    print(expr);
+    where expr = (variable or STRINGLITERAL) any number of times separated by a ','
+
+language:
+    start : statement
+
+    statement : "print" '(' expr ')' ';'
+
+    expr : subExpr ',' expr |
+           subExpr
+    subExpr : arithmeticExpression | STRINGLITERAL

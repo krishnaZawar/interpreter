@@ -1,0 +1,33 @@
+example 1:
+    a = 1;
+    b = 2;
+    c = a + b;
+
+example 2:
+    a = 1;
+    b = a + a - 10 * a;
+    print("the value of b is : ", b);
+
+example 3:
+    a = input("enter a");
+    b = input("enter b");
+    if(a > b){
+        print("a is greater");
+    }
+    else if(a < b){
+        print("b is greater");
+    }
+    else{
+        print("both are equal");
+    }
+
+example 4:
+    print("the number entered is " , input("num : "));
+
+example 5:
+    if(input("num1 : ") == input("num2 : ")){
+        print("both are equal");
+    }
+    else{
+        print("both are not equal");
+    }

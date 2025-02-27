@@ -1,0 +1,39 @@
+arithmeticExpression:
+    start : expression
+
+    expression : addSubExpr
+
+    addSubExpr : mulDivModExpr '+' addSubExpr |
+                 mulDivModExpr '-' addSubExpr |
+                 mulDivModExpr
+
+    mulDivModExpr : subExpr '*' mulDivModExpr |
+                 subExpr '/' mulDivModExpr |
+                 subExpr '%' mulDivModExpr |
+                 subExpr
+
+    subExpr    : '(' addSubExpr ')' |
+                 '-' subExpr |
+                 NUMERICLITERAL |
+                 IDENTIFIER |
+                 inputFunction
+
+booleanExpression:
+    start : expression
+
+    expression : orExpr
+
+    orExpr : andExpr "or" orExpr |
+             andExpr
+
+    andExpr : subExpr "and" andExpr |
+              subExpr
+
+    subExpr : '(' orExpr ')' |
+              condition
+
+    condition : expr relationalOperator expr
+
+    expr : arithmeticExpression
+
+    relationalOperator : '>' | '<' | '==' | '!=' | '>=' | '<='

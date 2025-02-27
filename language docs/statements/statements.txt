@@ -1,0 +1,8 @@
+start : statementList
+
+statementList : statement statementList |
+                statement
+
+statement : assignmentStatement |
+            printStatement |
+            ifElseIfStatement
