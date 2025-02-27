@@ -199,17 +199,11 @@ class Interpreter{
         void interpretPrintStatement(Node* root){
             std::string output = "";
             for(auto child : root->children){
-                if(child->token.type == NUMERICLITERAL){
-                    output += std::to_string(evaluateNumericLiteralNode(child));
-                }
-                if(child->token.type == ACTIVITY){
-                    output += std::to_string(interpretInputFunction(child));
-                }
                 if(child->token.type == STRINGLITERAL){
                     output += evaluateStringLiteralNode(child);
                 }
-                if(child->token.type == IDENTIFIER){
-                    output += std::to_string(evaluateNumericIdentifier(child));
+                else{
+                    output += std::to_string(evaluateArithmeticExpression(child));
                 }
             }
             std::cout<<output<<std::endl;
