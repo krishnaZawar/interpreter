@@ -1,5 +1,6 @@
 #include <string>
 #include<vector>
+#include<unordered_map>
 #include "tokenType.h"
 #include "token.h"
 
@@ -18,6 +19,8 @@ class Lexer{
         std::vector<char> openParenthesis;
         std::vector<char> closeParenthesis;
         std::vector<char> specialCharacters;
+        
+        std::unordered_map<char, char> escapeSequenceMap;
 
         void error(){
             throw std::string("unrecognized token");
@@ -79,6 +82,13 @@ class Lexer{
             specialCharacters = {
                 ','
             };
+
+            //build escape sequence map
+            escapeSequenceMap['n'] = '\n';
+            escapeSequenceMap['t'] = '\t';
+            escapeSequenceMap['\\'] = '\\';
+            escapeSequenceMap['\''] = '\'';
+            escapeSequenceMap['\"'] = '\"';
         }
         
         /*
@@ -111,9 +121,31 @@ class Lexer{
             else if(text[pointer] == '\"'){
                 pointer++;
                 std::string value = "";
-                while(pointer < text.length() && text[pointer] != '\"'){
-                    value += text[pointer];
+                // buffer indicates if there is a backslash encountered or not
+                bool buffer = false;
+                while(pointer < text.length() && (buffer || text[pointer] != '\"')){
+                    if(buffer){
+                        if(escapeSequenceMap.find(text[pointer]) != escapeSequenceMap.end()){
+                            value += escapeSequenceMap[text[pointer]];
+                            buffer = false;
+                        }
+                        else{
+                            error();
+                        }
+                    }
+                    else{
+                        if(text[pointer] == '\\'){
+                            buffer = true;
+                        }
+                        else{
+                            value += text[pointer];
+                        }
+                    }
                     pointer++;
+                }
+                //indicating the string literal was not terminated properly
+                if(buffer){
+                    error();
                 }
                 pointer++;
                 curToken = Token(value, STRINGLITERAL);
