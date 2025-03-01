@@ -29,7 +29,8 @@ language:
     ifElseIfStatement : ifStatement |
                         ifStatement elseIfStatements elseStatement
     elseIfStatements  : elseIfStatement elseIfStatements |
-                        elseIfStatement
+                        elseIfStatement |
+                        ""
 
     ifStatement       : "if" '(' booleanExpression ')' '{' statements '}'
     elseIfStatement   : "else if" '(' booleanExpression ')' '{' statements '}' 

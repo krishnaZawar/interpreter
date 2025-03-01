@@ -255,11 +255,32 @@ class Parser{
         return root;
     }
 
+    // ------------------------------------------------------------------parse while loop---------------------------------------------------
+
+    Node* parseWhileLoop(){
+        Node* root = new Node(Token("while", ACTIVITY));
+        
+        eat(KEYWORD);
+        parseParenthesis("(");
+        root->children.push_back(parseBooleanORExpr());
+        parseParenthesis(")");
+
+        parseParenthesis("{");
+        root->children.push_back(parseStatementList(Token("}", CLOSEPARENTHESIS)));
+        parseParenthesis("}");
+
+        return root;
+    }
+
     //-------------------------------------------------------------------parse program-------------------------------------------------------
     
     Node* parseStatement(){
         Node* root;
 
+        while(peek(ENDOFLINE)){
+            eat(ENDOFLINE);
+        }
+        
         if(peek(IDENTIFIER)){
             root = parseAssignmentStatement();
         }
@@ -269,16 +290,19 @@ class Parser{
         else if(curTokenValue("if")){
             root = parseIfElseIfStatement();
         }
-        else if(!(peek(ENDOFFILE) || peek(ENDOFLINE))){
+        else if(curTokenValue("while")){
+            root = parseWhileLoop();
+        }
+        else if(!(peek(ENDOFFILE))){
             error();
         }
         return root;
     }
-    Node* parseStatementList(Token token){
+    Node* parseStatementList(Token endToken){
         Node* root = new Node();
         root->children.push_back(parseStatement());
-        while(curToken != token){
-            if(curToken != token){
+        while(curToken != endToken){
+            if(curToken != endToken){
                 root->children.push_back(parseStatement());
             }
         }

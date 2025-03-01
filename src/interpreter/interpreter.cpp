@@ -229,6 +229,17 @@ class Interpreter{
             }
         }
 
+    // ---------------------------------------------------------------interpret while loop-------------------------------------------------
+
+    void interpretWhileLoop(Node* root){
+        Node* booleanExpression = root->children[0];
+        Node* statementList = root->children[1];
+
+        while(evaluateBooleanExpression(booleanExpression)){
+            interpretStatementList(statementList);
+        }
+    }
+
     // ----------------------------------------------------------------interpret program-----------------------------------------------------
 
         void interpretStatementList(Node* root){
@@ -241,6 +252,9 @@ class Interpreter{
                 }
                 if(child->token.value == "if"){
                     interpretIfElseIfBlock(child);
+                }
+                if(child->token.value == "while"){
+                    interpretWhileLoop(child);
                 }
             }
         }
