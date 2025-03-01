@@ -44,6 +44,9 @@ class Interpreter{
         }
 
         inline bool isOfDatatype(std::string var, char type){
+            if(datatype.find(var) == datatype.end()){
+                return false;
+            }
             return datatype[var] == type;
         }
 
