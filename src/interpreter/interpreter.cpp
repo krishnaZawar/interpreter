@@ -209,7 +209,7 @@ class Interpreter{
                     output += std::to_string(evaluateArithmeticExpression(child));
                 }
             }
-            std::cout<<output<<std::endl;
+            std::cout<<output;
         }
 
     // -----------------------------------------------------------if else if block------------------------------------------------
