@@ -61,7 +61,8 @@ class Lexer{
                 "or",
                 "if",
                 "else",
-                "input"
+                "input",
+                "while"
             };
 
             arithmeticOperators = {

@@ -1,0 +1,9 @@
+syntax:
+    while (booleanExpression){
+        statements
+    }
+
+language:
+    start: whileLoop
+
+    whileLoop : WHILE '(' booleanExpression ')' '{' statements '}'

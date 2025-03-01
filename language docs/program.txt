@@ -5,4 +5,5 @@ statementList : statement statementList |
 
 statement : assignmentStatement |
             ifElseIfStatement |
-            printStatement
+            printStatement |
+            whileLoop
