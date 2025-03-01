@@ -19,6 +19,7 @@ The program execution starts from the first line of the program and proceeds in 
 
 ### variables 
 variables can only hold integer values.
+Any variable declared has a global scope.
 They can be declared as follows
 ```
 a = 1;
@@ -59,15 +60,19 @@ else{
 	print("not a leap year");
 }
 ```
+### loops
+It supports while loops like any other language.
+sample program to print numbers from 1 to 10.
+```
+a = 1;
+while(a <= 10){
+	print(a);
+	a = a+1;
+}
+```
 
 ## Future development scope
-1. include a simple while loop
+1. add break and continue statements to while loop
 2. allow creation of string variables
 3. allow input of strings
 4. implementation basic string related functions
-
-
-
-
-
-
