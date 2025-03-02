@@ -1,10 +1,11 @@
 #include <unordered_map>
 #include <string>
+#include <iostream>
 #include "../parser/parser.cpp"
 #include "../parser/ast.h"
 #include "../lexer/tokenType.h"
+#include "../errorClasses/errorClasses.h"
 
-#include <iostream>
 
 #ifndef INTERPRETER_CLASS
 #define INTERPRETER_CLASS
@@ -16,30 +17,26 @@ class Interpreter{
 
         Parser parser;
 
-        void error(){
-            throw std::string("interpreter error");
+        inline void throwKeyError(std::string message, int line){
+            throw KeyError(message, line);
         }
-
+        inline void throwDivisionByZeroError(std::string message, int line){
+            throw DivisionByZeroError(message, line);
+        }
+        inline void throwValueError(std::string message, int line){
+            throw ValueError(message, line);
+        }
     // --------------------------------------------------------generics-------------------------------------------------------
 
         inline std::string interpretIdentifierNode(Node* root){
-            if(root->token.type != IDENTIFIER){
-                error();
-            }
             return root->token.value;
         }
 
         inline std::string evaluateStringLiteralNode(Node* root){
-            if(root->token.type != STRINGLITERAL){
-                error();
-            }
             return root->token.value;
         }
 
         inline int evaluateNumericLiteralNode(Node* root){
-            if(root->token.type != NUMERICLITERAL){
-                error();
-            }
             return std::stoi(root->token.value);
         }
 
@@ -50,10 +47,12 @@ class Interpreter{
             return datatype[var] == type;
         }
 
-        int evaluateNumericIdentifier(Node* root){
+        inline int evaluateNumericIdentifier(Node* root){
             std::string var = interpretIdentifierNode(root);
             if(!isOfDatatype(var, 'n')){
-                error();
+                std::string message = "Undeclared variable ";
+                message += + "\'" + var + "\' used";
+                throwKeyError(message, root->token.line);
             }
             return numValue[var];
         }
@@ -93,20 +92,26 @@ class Interpreter{
             else{
                 rightVal = evaluateOperatorNode(rightExpr);
             }
-
+            
+            if(root->token.value == "%"){
+                if(rightVal == 0){
+                    throwDivisionByZeroError("Cannot mod a value by 0", root->token.line);
+                }
+                return leftVal % rightVal;
+            }
+            if(root->token.value == "/"){
+                if(rightVal == 0){
+                    throwDivisionByZeroError("Cannot divide a value by 0", root->token.line);
+                }
+                return leftVal / rightVal;
+            }
             if(root->token.value == "+"){
                 return leftVal + rightVal;
             }
             if(root->token.value == "-"){
                 return leftVal - rightVal;
             }
-            if(root->token.value == "*"){
-                return leftVal * rightVal;
-            }
-            if(root->token.value == "%"){
-                return leftVal % rightVal;
-            }
-            return leftVal / rightVal;
+            return leftVal * rightVal;
         }
         int evaluateArithmeticExpression(Node* root){
             if(root->token.type == NUMERICLITERAL){
@@ -184,7 +189,14 @@ class Interpreter{
                 std::cout<<child->token.value;
             }
             int value;
-            std::cin>>value;
+            try{
+                std::string tempVal;
+                std::cin>>tempVal;
+                value = std::stoi(tempVal);
+            }
+            catch(...){
+                throwValueError("cannot assign a non-integer to an integer variable.", root->token.line);
+            }
             return value;
         }
     //-----------------------------------------------------assignment statement----------------------------------------------

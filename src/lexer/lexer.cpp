@@ -3,6 +3,7 @@
 #include<unordered_map>
 #include "tokenType.h"
 #include "token.h"
+#include "../errorClasses/errorClasses.h"
 
 #ifndef LEXER_CLASS
 #define LEXER_CLASS
@@ -10,6 +11,7 @@
 class Lexer{
     private:
         int pointer;
+        int curLine;
         std::string text;
 
         std::vector<std::string> keywords;
@@ -19,11 +21,13 @@ class Lexer{
         std::vector<char> openParenthesis;
         std::vector<char> closeParenthesis;
         std::vector<char> specialCharacters;
+
+        std::vector<char> skippables;
         
         std::unordered_map<char, char> escapeSequenceMap;
 
-        void error(){
-            throw std::string("unrecognized token");
+        inline void throwTokenError(std::string message){
+            throw TokenError(message, curLine);
         }
         
         /*
@@ -44,7 +48,7 @@ class Lexer{
             checks if a value(of type t) exists in a list<t>
         */
         template<class t>
-        bool exists(const t &data, const std::vector<t> &list){
+        inline bool exists(const t &data, const std::vector<t> &list){
             for(auto item : list){
                 if(data == item){
                     return true;
@@ -53,9 +57,12 @@ class Lexer{
             return false;
         }
 
+        
     public:
+
         Lexer(){
             pointer = 0;
+            curLine = 1;
             text = "";
 
             keywords = {
@@ -83,6 +90,10 @@ class Lexer{
                 ','
             };
 
+            skippables = {
+                '\n', ' ', '\t'
+            };
+
             //build escape sequence map
             escapeSequenceMap['n'] = '\n';
             escapeSequenceMap['t'] = '\t';
@@ -97,6 +108,7 @@ class Lexer{
         void tokenize(std::string _text){
             text = _text;
             pointer = 0;
+            curLine = 1;
         }
 
         /*
@@ -105,17 +117,20 @@ class Lexer{
         Token getNextToken(){
             Token curToken;
 
-            while(text[pointer] == ' ' || text[pointer] == '\t' || text[pointer] == '\n'){
+            while(exists(text[pointer], skippables)){
+                if(text[pointer] == '\n'){
+                    curLine++;
+                }
                 pointer++;
             }
 
             if(pointer >= text.length()){
-                curToken = Token("", ENDOFFILE);
+                curToken = Token("", ENDOFFILE, curLine);
             }
 
             else if(text[pointer] == ';'){
                 pointer++;
-                curToken = Token(";", ENDOFLINE);
+                curToken = Token(";", ENDOFLINE, curLine);
             }
 
             else if(text[pointer] == '\"'){
@@ -130,7 +145,9 @@ class Lexer{
                             buffer = false;
                         }
                         else{
-                            error();
+                            std::string message = "Unrecognised escape sequence \\";
+                            message += text[pointer];
+                            throwTokenError(message);
                         }
                     }
                     else{
@@ -144,48 +161,48 @@ class Lexer{
                     pointer++;
                 }
                 //indicating the string literal was not terminated properly
-                if(buffer){
-                    error();
+                if(buffer || (pointer >= text.length() && text[pointer - 1] != '\"')){
+                    throwTokenError("Expected \"");
                 }
                 pointer++;
-                curToken = Token(value, STRINGLITERAL);
+                curToken = Token(value, STRINGLITERAL, curLine);
             }
 
             else if(exists(text[pointer], specialCharacters)){
                 std::string value = "";
                 value += text[pointer];
                 pointer++;
-                curToken = Token(value, SPECIALCHARACTER);
+                curToken = Token(value, SPECIALCHARACTER, curLine);
             }
 
             else if(exists(text[pointer], openParenthesis)){
                 std::string value = "";
                 value += text[pointer];
                 pointer++;
-                curToken = Token(value, OPENPARENTHESIS);
+                curToken = Token(value, OPENPARENTHESIS, curLine);
             }
             else if(exists(text[pointer], closeParenthesis)){
                 std::string value = "";
                 value += text[pointer];
                 pointer++;
-                curToken = Token(value, CLOSEPARENTHESIS);
+                curToken = Token(value, CLOSEPARENTHESIS, curLine);
             }
 
             else if(exists(text[pointer], arithmeticOperators)){
                 std::string value = "";
                 value += text[pointer];
                 pointer++;
-                curToken = Token(value, ARITHMETICOPERATOR);
+                curToken = Token(value, ARITHMETICOPERATOR, curLine);
             }
 
             else if(text[pointer] == '='){
                 pointer++;
                 if(pointer < text.length() && text[pointer] == '='){
                     pointer++;
-                    curToken = Token("==", RELATIONALOPERATOR);
+                    curToken = Token("==", RELATIONALOPERATOR, curLine);
                 }
                 else{
-                    curToken = Token("=", ASSIGNMENT);
+                    curToken = Token("=", ASSIGNMENT, curLine);
                 }
             }
             else if(text[pointer] == '>' || text[pointer] == '<'){
@@ -196,17 +213,17 @@ class Lexer{
                     value += text[pointer];
                     pointer++;
                 }
-                curToken = Token(value, RELATIONALOPERATOR);
+                curToken = Token(value, RELATIONALOPERATOR, curLine);
             }
             else if(text[pointer] == '!'){
                 std::string value = "";
                 value += text[pointer];
                 pointer++;
                 if(pointer < text.length() && text[pointer] != '='){
-                    error();
+                    throwTokenError("Unrecognised token \'!\'");
                 }
                 pointer++;
-                curToken = Token("!=", RELATIONALOPERATOR);
+                curToken = Token("!=", RELATIONALOPERATOR, curLine);
             }
 
             else if(isDigit()){
@@ -215,7 +232,7 @@ class Lexer{
                     value += text[pointer];
                     pointer++;
                 }
-                curToken = Token(value, NUMERICLITERAL);
+                curToken = Token(value, NUMERICLITERAL, curLine);
             }
 
             else if(isAlpha()){
@@ -226,14 +243,16 @@ class Lexer{
                 }
 
                 if(exists(value, keywords)){
-                    curToken = Token(value, KEYWORD);
+                    curToken = Token(value, KEYWORD, curLine);
                 }
                 else{
-                    curToken = Token(value, IDENTIFIER);
+                    curToken = Token(value, IDENTIFIER, curLine);
                 }
             }
             else{
-                error();
+                std::string message = "Unrecognised token ";
+                message += text[pointer];
+                throwTokenError(message);
             }
             return curToken;
         }

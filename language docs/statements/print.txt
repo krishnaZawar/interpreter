@@ -9,4 +9,4 @@ language:
 
     expr : subExpr ',' expr |
            subExpr
-    subExpr : arithmeticExpression | STRINGLITERAL
+    subExpr : arithmeticExpression | STRINGLITERAL | ""

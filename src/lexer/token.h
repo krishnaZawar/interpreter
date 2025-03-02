@@ -8,17 +8,20 @@ class Token{
     public:
         std::string value;
         TokenType type;
+        int line;
 
         Token() {}
         
-        Token(std::string _value, TokenType _type){
+        Token(std::string _value, TokenType _type, int _line){
             value = _value;
             type = _type;
+            line = _line;
         }
 
         Token(const Token &t){
             value = t.value;
             type = t.type;
+            line = t.line;
         }
 
         const bool operator !=(const Token &token){
