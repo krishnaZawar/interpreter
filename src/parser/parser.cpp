@@ -309,7 +309,12 @@ class Parser{
         return root;
     }
 
+    
     public:
+        inline int getCurrenLine(){
+            return lexer.getCurrentLine();
+        }
+        
         Parser(){
             lexer = Lexer();
         }

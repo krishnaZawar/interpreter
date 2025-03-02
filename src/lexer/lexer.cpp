@@ -3,6 +3,7 @@
 #include<unordered_map>
 #include "tokenType.h"
 #include "token.h"
+#include "../errorClasses/errorClasses.h"
 
 #ifndef LEXER_CLASS
 #define LEXER_CLASS
@@ -10,6 +11,7 @@
 class Lexer{
     private:
         int pointer;
+        int curLine;
         std::string text;
 
         std::vector<std::string> keywords;
@@ -22,8 +24,8 @@ class Lexer{
         
         std::unordered_map<char, char> escapeSequenceMap;
 
-        void error(){
-            throw std::string("unrecognized token");
+        inline void throwTokenError(std::string message){
+            throw TokenError(message, getCurrentLine());
         }
         
         /*
@@ -53,9 +55,15 @@ class Lexer{
             return false;
         }
 
+        
     public:
+        inline int getCurrentLine(){
+            return curLine;
+        }
+
         Lexer(){
             pointer = 0;
+            curLine = 1;
             text = "";
 
             keywords = {
@@ -97,6 +105,7 @@ class Lexer{
         void tokenize(std::string _text){
             text = _text;
             pointer = 0;
+            curLine = 1;
         }
 
         /*
@@ -106,6 +115,9 @@ class Lexer{
             Token curToken;
 
             while(text[pointer] == ' ' || text[pointer] == '\t' || text[pointer] == '\n'){
+                if(text[pointer] == '\n'){
+                    curLine++;
+                }
                 pointer++;
             }
 
@@ -130,7 +142,9 @@ class Lexer{
                             buffer = false;
                         }
                         else{
-                            error();
+                            std::string message = "Unrecognised escape sequence \\";
+                            message += text[pointer];
+                            throwTokenError(message);
                         }
                     }
                     else{
@@ -144,8 +158,8 @@ class Lexer{
                     pointer++;
                 }
                 //indicating the string literal was not terminated properly
-                if(buffer){
-                    error();
+                if(buffer || (pointer >= text.length() && text[pointer - 1] != '\"')){
+                    throwTokenError("Expected \"");
                 }
                 pointer++;
                 curToken = Token(value, STRINGLITERAL);
@@ -203,7 +217,7 @@ class Lexer{
                 value += text[pointer];
                 pointer++;
                 if(pointer < text.length() && text[pointer] != '='){
-                    error();
+                    throwTokenError("Unrecognised token \'!\'");
                 }
                 pointer++;
                 curToken = Token("!=", RELATIONALOPERATOR);
@@ -233,7 +247,9 @@ class Lexer{
                 }
             }
             else{
-                error();
+                std::string message = "Unrecognised token ";
+                message += text[pointer];
+                throwTokenError(message);
             }
             return curToken;
         }

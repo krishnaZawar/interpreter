@@ -261,6 +261,12 @@ class Interpreter{
                 }
             }
         }
+    
+    
+    protected:
+        inline int getCurrentLine(){
+            return parser.getCurrenLine();
+        }
 
     public:
         Interpreter(){

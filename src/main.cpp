@@ -1,6 +1,7 @@
 #include <iostream>
 #include<fstream>
 #include "interpreter/interpreter.cpp"
+#include "errorClasses/errorClasses.h"
 
 int main(int argc, char* argv[]){
     std::ifstream file (argv[1]);
@@ -18,6 +19,9 @@ int main(int argc, char* argv[]){
     }
     catch(std::string &e){
         std::cout<<e<<std::endl;
+    }
+    catch(Error &e){
+        std::cout<<e.getMessage()<<std::endl;
     }
 
     file.close();

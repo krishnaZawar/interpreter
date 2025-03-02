@@ -1,0 +1,16 @@
+Error Format:
+    <Type of Error>: line <line number> : <information regarding the error>
+
+
+Error Classes:
+    1. tokenError
+        thrown by the lexer when an unrecognised token is encountered.
+    
+    2. syntaxError
+        thrown by the parser when some invalid syntax is encountered.
+    
+    3. keyError
+        thrown by the interpreter when a variable is used without initialising it.
+    
+    4. divisionByZeroError
+        thrown by the interpreter when a variable is divided/mod by 0.
