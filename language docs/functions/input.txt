@@ -11,4 +11,6 @@ language:
     statement : INPUT '(' prompt ')'
 
     prompt : STRINGLITERAL prompt |
-           STRINGLITERAL
+             STRINGLITERAL |
+             arithmeticExpression |
+             ""

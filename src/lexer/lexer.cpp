@@ -46,7 +46,7 @@ class Lexer{
             checks if a value(of type t) exists in a list<t>
         */
         template<class t>
-        bool exists(const t &data, const std::vector<t> &list){
+        inline bool exists(const t &data, const std::vector<t> &list){
             for(auto item : list){
                 if(data == item){
                     return true;
