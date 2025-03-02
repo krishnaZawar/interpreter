@@ -17,9 +17,6 @@ int main(int argc, char* argv[]){
     try{
         interpreter.interpret(input);
     }
-    catch(std::string &e){
-        std::cout<<e<<std::endl;
-    }
     catch(Error &e){
         std::cout<<e.getMessage()<<std::endl;
     }

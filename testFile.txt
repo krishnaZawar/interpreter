@@ -1,3 +1,12 @@
-print(
-    "hello world"
-);
+year = input("enter year : ");
+if(year % 4 == 0){
+    if(year % 100 == 0 and year % 400 != 0){
+        print("not a leap year\n");
+    }
+    else{   
+        print("leap year");
+    }
+}
+else{
+    print("not a leap year");
+}

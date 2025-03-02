@@ -14,7 +14,7 @@ class Parser{
         Token curToken;
 
         inline void throwSyntaxError(std::string message){
-            throw SyntaxError(message, getCurrenLine());
+            throw SyntaxError(message, curToken.line);
         }
 
     // -----------------------------------------------------------generic functions---------------------------------------------------------
@@ -69,7 +69,7 @@ class Parser{
         if(curTokenValue("-")){
             root = new Node(curToken);
             eat(ARITHMETICOPERATOR);
-            root->children.push_back(new Node(Token("0", NUMERICLITERAL)));
+            root->children.push_back(new Node(Token("0", NUMERICLITERAL, curToken.line)));
             root->children.push_back(parseArithmeticSubExpr());
         }
         else if(curTokenValue("(")){
@@ -174,7 +174,7 @@ class Parser{
     // ------------------------------------------------------------------parse input function-----------------------------------------------
 
     Node* parseInputFunction(){
-        Node* root = new Node(Token("input", ACTIVITY));
+        Node* root = new Node(Token("input", ACTIVITY, curToken.line));
         
         eat(KEYWORD);
         parseParenthesis("(");
@@ -205,7 +205,7 @@ class Parser{
     //-------------------------------------------------------------------parse assignment statement-------------------------------------------
     
     Node* parseAssignmentStatement(){
-        Node* root = new Node(Token("assignment", ACTIVITY));
+        Node* root = new Node(Token("assignment", ACTIVITY, curToken.line));
         Node* identifierNode = new Node(curToken);
         eat(IDENTIFIER);
         if(peek(ASSIGNMENT)){
@@ -223,7 +223,7 @@ class Parser{
     // -----------------------------------------------------------------parse print statement-----------------------------------------------
 
     Node* parsePrintStatement(){
-        Node* root = new Node(Token("print", ACTIVITY));
+        Node* root = new Node(Token("print", ACTIVITY, curToken.line));
         eat(KEYWORD);
         parseParenthesis("(");
         if(curTokenValue(")")){
@@ -255,7 +255,7 @@ class Parser{
     // ------------------------------------------------------------------if else if block--------------------------------------------------
 
     Node* parseIfElseIfStatement(){
-        Node* root = new Node(Token("if", ACTIVITY));
+        Node* root = new Node(Token("if", ACTIVITY, curToken.line));
         eat(KEYWORD);
 
         parseParenthesis("(");
@@ -263,7 +263,7 @@ class Parser{
         parseParenthesis(")");
 
         parseParenthesis("{");
-        root->children.push_back(parseStatementList(Token("}", CLOSEPARENTHESIS)));
+        root->children.push_back(parseStatementList(Token("}", CLOSEPARENTHESIS, curToken.line)));
         parseParenthesis("}");
 
         if(curTokenValue("else")){
@@ -273,7 +273,7 @@ class Parser{
             }
             else{
                 parseParenthesis("{");
-                root->children.push_back(parseStatementList(Token("}", CLOSEPARENTHESIS)));
+                root->children.push_back(parseStatementList(Token("}", CLOSEPARENTHESIS, curToken.line)));
                 parseParenthesis("}");
             }
         }
@@ -284,7 +284,7 @@ class Parser{
     // ------------------------------------------------------------------parse while loop---------------------------------------------------
 
     Node* parseWhileLoop(){
-        Node* root = new Node(Token("while", ACTIVITY));
+        Node* root = new Node(Token("while", ACTIVITY, curToken.line));
         
         eat(KEYWORD);
         parseParenthesis("(");
@@ -292,7 +292,7 @@ class Parser{
         parseParenthesis(")");
 
         parseParenthesis("{");
-        root->children.push_back(parseStatementList(Token("}", CLOSEPARENTHESIS)));
+        root->children.push_back(parseStatementList(Token("}", CLOSEPARENTHESIS, curToken.line)));
         parseParenthesis("}");
 
         return root;
@@ -336,10 +336,6 @@ class Parser{
 
     
     public:
-        inline int getCurrenLine(){
-            return lexer.getCurrentLine();
-        }
-
         Parser(){
             lexer = Lexer();
         }
@@ -352,7 +348,7 @@ class Parser{
 
             curToken = lexer.getNextToken();
 
-            return parseStatementList(Token("", ENDOFFILE));
+            return parseStatementList(Token("", ENDOFFILE, curToken.line));
         }
 };
 

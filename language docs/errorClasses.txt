@@ -14,3 +14,6 @@ Error Classes:
     
     4. divisionByZeroError
         thrown by the interpreter when a variable is divided/mod by 0.
+
+    5. ValueError
+        thrown by the interpreter when the expected datatype is different.
