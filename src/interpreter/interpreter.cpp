@@ -5,6 +5,7 @@
 #include "../parser/ast.h"
 #include "../lexer/tokenType.h"
 #include "../errorClasses/errorClasses.h"
+#include "../interrupts/interrupts.h"
 
 
 #ifndef INTERPRETER_CLASS
@@ -25,6 +26,9 @@ class Interpreter{
         }
         inline void throwValueError(std::string message, int line){
             throw ValueError(message, line);
+        }
+        inline void throwSyntaxError(std::string message, int line){
+            throw SyntaxError(message, line);
         }
     // --------------------------------------------------------generics-------------------------------------------------------
 
@@ -245,13 +249,23 @@ class Interpreter{
         }
 
     // ---------------------------------------------------------------interpret while loop-------------------------------------------------
-
+    
     void interpretWhileLoop(Node* root){
         Node* booleanExpression = root->children[0];
         Node* statementList = root->children[1];
 
         while(evaluateBooleanExpression(booleanExpression)){
-            interpretStatementList(statementList);
+            try{   
+                interpretStatementList(statementList);
+            }
+            catch(LoopControlInterrupt &loopControl){
+                if(loopControl.token.value == "break"){
+                    return;
+                }
+                else if(loopControl.token.value == "continue"){
+                    //pass
+                }
+            }
         }
     }
 
@@ -271,6 +285,9 @@ class Interpreter{
                 if(child->token.value == "while"){
                     interpretWhileLoop(child);
                 }
+                if(child->token.value == "break" || child->token.value == "continue"){
+                    throw LoopControlInterrupt(child->token);
+                }
             }
         }
 
@@ -284,7 +301,12 @@ class Interpreter{
             numValue.clear();
 
             Node* ast = parser.parse(text);
-            interpretStatementList(ast);
+            try{
+                interpretStatementList(ast);
+            }
+            catch(LoopControlInterrupt &loopControl){
+                throwSyntaxError(loopControl.token.value + " cannot be used outside a loop", loopControl.token.line);
+            }
         }
 };
 

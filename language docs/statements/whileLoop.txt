@@ -7,3 +7,10 @@ language:
     start: whileLoop
 
     whileLoop : WHILE '(' booleanExpression ')' '{' statements '}'
+
+    statements: assignmentStatement |
+                printStatement |
+                ifElseIfStatement |
+                whileLoop |
+                breakStatement |
+                continueStatement
