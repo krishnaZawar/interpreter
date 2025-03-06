@@ -1,12 +1,12 @@
-year = input("enter year : ");
-if(year % 4 == 0){
-    if(year % 100 == 0 and year % 400 != 0){
-        print("not a leap year\n");
+a = 1;
+while(a <= 10){
+    if(a % 5 == 0){
+        break;
     }
-    else{   
-        print("leap year");
+    if(a % 2 == 1){
+        a = a+1;
+        continue;
     }
-}
-else{
-    print("not a leap year");
+    print(a, "\n");
+    a=a+1;
 }

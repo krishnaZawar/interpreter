@@ -1,0 +1,21 @@
+Break Statement:
+    To stop further execution of the loop
+
+    syntax:
+        break;
+
+    language:
+        start: Statement
+
+        Statement : BREAK ';'
+
+Continue Statement:
+    To skip the current iteration and go to the next one in the loop.
+
+    syntax:
+        continue;
+
+    language:
+        start: Statement
+
+        Statement : CONTINUE ';'

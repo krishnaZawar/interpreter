@@ -282,7 +282,13 @@ class Parser{
     }
 
     // ------------------------------------------------------------------parse while loop---------------------------------------------------
-
+    Node* parseLoopControlStatemet(){
+        Node* root = new Node(Token(curToken.value, ACTIVITY, curToken.line));
+        eat(KEYWORD);
+        parseEndOfLine();
+        return root;
+    }
+    
     Node* parseWhileLoop(){
         Node* root = new Node(Token("while", ACTIVITY, curToken.line));
         
@@ -299,9 +305,8 @@ class Parser{
     }
 
     //-------------------------------------------------------------------parse program-------------------------------------------------------
-    
     Node* parseStatement(){
-        Node* root;
+        Node* root = NULL;
 
         while(peek(ENDOFLINE)){
             eat(ENDOFLINE);
@@ -318,6 +323,9 @@ class Parser{
         }
         else if(curTokenValue("while")){
             root = parseWhileLoop();
+        }
+        else if(curTokenValue("break") || curTokenValue("continue")){
+            root = parseLoopControlStatemet();
         }
         else if(!(peek(ENDOFFILE))){
             throwSyntaxError("invalid syntax");
