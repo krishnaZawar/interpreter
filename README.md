@@ -70,9 +70,46 @@ while(a <= 10){
 	a = a+1;
 }
 ```
+#### loop controls
+##### break
+stops further execution of the loop.
+```
+a = 1;
+while(a <= 5){
+	if(a == 3){
+		break;
+	}
+	print(a, "\n");
+	a=a+1;
+}
+```
+output of the above code:
+```
+1
+2
+ ```
+##### continue
+stops execution of the current iteration of the loop and proceeds to the next iteration.
+```
+a = 1;
+while(a <= 5){
+	if(a == 3){
+		a=a+1;
+		continue;
+	}
+	print(a, "\n");
+	a=a+1;
+}
+```
+output of the above code:
+```
+1
+2
+4
+5
+ ```
 
 ## Future development scope
-1. add break and continue statements to while loop
-2. allow creation of string variables
-3. allow input of strings
-4. implementation basic string related functions
+1. allow creation of string variables
+2. allow input of strings
+3. implementation basic string related functions
