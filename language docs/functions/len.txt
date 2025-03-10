@@ -1,0 +1,13 @@
+syntax:
+    len(prompt)
+
+    prompt : either a string variable for string value
+
+return value:
+    returns a integer holding the string's length.
+
+language:
+    start: statement
+
+    statement : LEN '(' value ')'
+    value : IDENTIFIER | STRINGLITERAL

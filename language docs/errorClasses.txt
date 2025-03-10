@@ -17,3 +17,6 @@ Error Classes:
 
     5. ValueError
         thrown by the interpreter when the expected datatype is different.
+
+    6. TypeError
+        thrown when a variable with unexpected type is found.

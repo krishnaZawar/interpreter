@@ -1,0 +1,30 @@
+intFunction:
+    syntax:
+        int(prompt)
+
+        prompt: stringExpression
+    
+    return value:
+        returns the passed string as a integer value
+
+    language:
+        start: statement
+
+        statement : INT '(' value ')'
+        value: stringExpression
+
+stringFunction:
+    syntax:
+        string(prompt)
+
+        prompt: arithmeticExpression
+    
+    return value:
+        returns the passed string as a integer value
+
+    language:
+        start: statement
+
+        statement : STRING '(' value ')'
+        value: arithmeticExpression
+        

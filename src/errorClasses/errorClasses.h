@@ -3,3 +3,4 @@
 #include "keyError.cpp"
 #include "divisionByZeroError.cpp"
 #include "valueError.cpp"
+#include "typeError.cpp"

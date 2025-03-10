@@ -3,7 +3,7 @@ syntax:
     prompt is a expression of string literals
 
 return value:
-    returns an numeric value
+    returns an string value
 
 language:
     start: statement
@@ -13,4 +13,5 @@ language:
     prompt : STRINGLITERAL prompt |
              STRINGLITERAL |
              arithmeticExpression |
+             stringExpression |
              ""
