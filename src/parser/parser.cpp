@@ -77,12 +77,12 @@ class Parser{
             root = parseAddSubExpr();
             parseParenthesis(")");
         }
-        else if(peek(NUMERICLITERAL) || peek(IDENTIFIER)) {
+        else if(peek(NUMERICLITERAL) || peek(IDENTIFIER) || peek(STRINGLITERAL)) {
             root = new Node(curToken);
             eat(curToken.type);
         }
-        else if(curTokenValue("input")){
-            root = parseInputFunction();
+        else if(peek(KEYWORD)){
+            root = parseBuiltin();
         }
         else if(!peek(ENDOFLINE)){
             throwSyntaxError("unexpected token " + curToken.value);
@@ -171,7 +171,7 @@ class Parser{
         return root;
     }
 
-    // ------------------------------------------------------------------parse input function-----------------------------------------------
+    // ------------------------------------------------------------------parse builtins-----------------------------------------------
 
     Node* parseInputFunction(){
         Node* root = new Node(Token("input", ACTIVITY, curToken.line));
@@ -179,31 +179,69 @@ class Parser{
         eat(KEYWORD);
         parseParenthesis("(");
         if(curTokenValue(")")){
-            // do nothing
+            return root;
         }
-        else if(peek(STRINGLITERAL)){
-            root->children.push_back(new Node(curToken));
-            eat(STRINGLITERAL);
-        }
-        else{
-            root->children.push_back(parseAddSubExpr());
-        }
+        root->children.push_back(parseAddSubExpr());
         while(curTokenValue(",")){
             eat(SPECIALCHARACTER);
-            if(peek(STRINGLITERAL)){
-                root->children.push_back(new Node(curToken));
-                eat(STRINGLITERAL);
-            }
-            else{
-                root->children.push_back(parseAddSubExpr());
-            }
+            root->children.push_back(parseAddSubExpr());
         }
         parseParenthesis(")");
 
         return root;
     }
-    //-------------------------------------------------------------------parse assignment statement-------------------------------------------
+
+    Node* parseIntFunction(){
+        Node* root = new Node(Token("int", ACTIVITY, curToken.line));
+        eat(KEYWORD);
+        parseParenthesis("(");
+        root->children.push_back(parseAddSubExpr());
+        parseParenthesis(")");
+        return root;
+    }
+
+    Node* parseStringFunction(){
+        Node* root = new Node(Token("string", ACTIVITY, curToken.line));
+        eat(KEYWORD);
+        parseParenthesis("(");
+        root->children.push_back(parseAddSubExpr());
+        parseParenthesis(")");
+        return root;
+    }
     
+    Node* parseLenFunction(){
+        Node* root = new Node(Token("len", ACTIVITY, curToken.line));
+        eat(KEYWORD);
+        parseParenthesis("(");
+        root->children.push_back(parseAddSubExpr());
+        parseParenthesis(")");
+        return root;
+    }
+
+    inline Node* parseBuiltin(){
+        Node* root;
+
+        if(curTokenValue("input")){
+            root = parseInputFunction();
+        }
+        else if(curTokenValue("int")){
+            root = parseIntFunction();
+        }
+        else if(curTokenValue("string")){
+            root = parseStringFunction();
+        }
+        else if(curTokenValue("len")){
+            root = parseLenFunction();
+        }
+        else{
+            throwSyntaxError("invalid syntax");
+        }
+
+        return root;
+    }
+
+    //-------------------------------------------------------------------parse assignment statement-------------------------------------------
+
     Node* parseAssignmentStatement(){
         Node* root = new Node(Token("assignment", ACTIVITY, curToken.line));
         Node* identifierNode = new Node(curToken);
@@ -227,24 +265,12 @@ class Parser{
         eat(KEYWORD);
         parseParenthesis("(");
         if(curTokenValue(")")){
-            // do nothing
+            return root;
         }
-        else if(peek(STRINGLITERAL)){
-            root->children.push_back(new Node(curToken));
-            eat(STRINGLITERAL);
-        }
-        else{
-            root->children.push_back(parseAddSubExpr());
-        }
+        root->children.push_back(parseAddSubExpr());
         while(curTokenValue(",")){
             eat(SPECIALCHARACTER);
-            if(peek(STRINGLITERAL)){
-                root->children.push_back(new Node(curToken));
-                eat(STRINGLITERAL);
-            }
-            else{
-                root->children.push_back(parseAddSubExpr());
-            }
+            root->children.push_back(parseAddSubExpr());
         }
         parseParenthesis(")");
         parseEndOfLine();

@@ -16,7 +16,20 @@ arithmeticExpression:
                  '-' subExpr |
                  NUMERICLITERAL |
                  IDENTIFIER |
-                 inputFunction
+                 intFunction |
+                 lenFunction
+
+stringExpression:
+    start : expression
+
+    expression : subExpr '+' expression |
+                 subExpr
+    
+    subExpr : STRINGLITERAL | 
+              IDENTIFIER | 
+              stringFunction |
+              inputFunction |
+              '(' expression ')'
 
 booleanExpression:
     start : expression
@@ -34,6 +47,6 @@ booleanExpression:
 
     condition : expr relationalOperator expr
 
-    expr : arithmeticExpression
+    expr : arithmeticExpression | stringExpression
 
     relationalOperator : '>' | '<' | '==' | '!=' | '>=' | '<='

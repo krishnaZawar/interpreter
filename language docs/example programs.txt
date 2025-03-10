@@ -9,8 +9,8 @@ example 2:
     print("the value of b is : ", b);
 
 example 3:
-    a = input("enter a");
-    b = input("enter b");
+    a = int(input("enter a"));
+    b = int(input("enter b"));
     if(a > b){
         print("a is greater");
     }
@@ -22,10 +22,10 @@ example 3:
     }
 
 example 4:
-    print("the number entered is " , input("num : "));
+    print("the number entered is " , int(input("num : ")));
 
 example 5:
-    if(input("num1 : ") == input("num2 : ")){
+    if(int(input("num1 : ")) == int(input("num2 : "))){
         print("both are equal");
     }
     else{
@@ -38,3 +38,7 @@ example 6:
         print(a);
         a = a+1;
     }
+
+example 7:
+    a = input("enter your name: ");
+    print("Hello " + a);

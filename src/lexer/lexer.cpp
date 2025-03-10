@@ -74,7 +74,10 @@ class Lexer{
                 "input",
                 "while",
                 "break",
-                "continue"
+                "continue",
+                "int",
+                "string",
+                "len"
             };
 
             arithmeticOperators = {

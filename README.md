@@ -18,31 +18,59 @@ interpreter test.txt
 The program execution starts from the first line of the program and proceeds in order till the end of the file.
 
 ### variables 
-variables can only hold integer values.
+Two types of variables can be created, string and integer.
 Any variable declared has a global scope.
 They can be declared as follows
 ```
 a = 1;
 b = 2 + a;
 c = a*b + (2/3);
+d = "hello world";
 ```
 
-### predefined functions
+### builtin functions
 #### print 
 use "print" to output anything to the console.
 ```
 print("hello world");
 print("value of a : ", a);
 ```
-
 #### input
 use "input" fetch data from the user.
-"input" only accepts integers.
 it can be used as follows:
 ```
 a = input("enter value of a: ");
 ```
-
+#### string
+"string" is used to convert an integer into string type. This accepts only integer values as argument.
+```
+b = str(1) + "23";
+print(b);
+```
+output:
+```
+123
+```
+#### int
+"int" is used to convert a string to integer type. This accepts only string values as argument.
+```
+b = int("1") + 1;
+print(b);
+```
+output:
+```
+2
+```
+#### len
+"len" is used to get the length of the string.
+```
+b = len("hello world");
+print(b);
+```
+output:
+```
+11
+```
 ### conditionals
 It supports if-else-if ladder like any other language.
 sample program to check if leap year or not using if-else-if ladder.
@@ -110,6 +138,7 @@ output of the above code:
  ```
 
 ## Future development scope
-1. allow creation of string variables
-2. allow input of strings
-3. implementation basic string related functions
+1. Add arrays
+2. Add advanced string functions
+3. Facilitate function creation
+4. Add comments

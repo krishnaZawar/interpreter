@@ -6,3 +6,7 @@ language for numbers:
     start : statement
 
     statement : IDENTIFIER '=' expression ';'
+
+    expression : function '(' prompt ')' ';' |
+                 arithmeticExpression | stringExpression
+    
