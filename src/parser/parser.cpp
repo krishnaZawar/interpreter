@@ -179,9 +179,11 @@ class Parser{
         eat(KEYWORD);
         parseParenthesis("(");
         if(curTokenValue(")")){
-            return root;
+            // do nothing
         }
-        root->children.push_back(parseAddSubExpr());
+        else{
+            root->children.push_back(parseAddSubExpr());
+        }
         while(curTokenValue(",")){
             eat(SPECIALCHARACTER);
             root->children.push_back(parseAddSubExpr());
@@ -265,9 +267,11 @@ class Parser{
         eat(KEYWORD);
         parseParenthesis("(");
         if(curTokenValue(")")){
-            return root;
+            // do nothing
         }
-        root->children.push_back(parseAddSubExpr());
+        else{
+            root->children.push_back(parseAddSubExpr());
+        }
         while(curTokenValue(",")){
             eat(SPECIALCHARACTER);
             root->children.push_back(parseAddSubExpr());
