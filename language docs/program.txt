@@ -6,4 +6,5 @@ statementList : statement statementList |
 statement : assignmentStatement |
             ifElseIfStatement |
             printStatement |
-            whileLoop
+            whileLoop |
+            comment

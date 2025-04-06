@@ -141,4 +141,3 @@ output of the above code:
 1. Add arrays
 2. Add advanced string functions
 3. Facilitate function creation
-4. Add comments
