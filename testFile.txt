@@ -1,1 +1,3 @@
+# this is a comment
 a = len("1");
+print(a);

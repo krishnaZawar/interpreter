@@ -129,6 +129,16 @@ class Lexer{
                 pointer++;
             }
 
+            if(pointer < text.length() && text[pointer] == '#'){
+                pointer++;
+                while(pointer < text.length() && text[pointer] != '\n'){
+                    pointer++;
+                }
+                pointer++;
+                curLine++;
+            }
+
+            
             if(pointer >= text.length()){
                 curToken = Token("", ENDOFFILE, curLine);
             }

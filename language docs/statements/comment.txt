@@ -1,0 +1,6 @@
+syntax:
+    # <comment>
+
+language:
+    start: statement
+    statement : '#' STRINGLITERAL
